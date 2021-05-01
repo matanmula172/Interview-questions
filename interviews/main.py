@@ -172,5 +172,5 @@ def find_longest_palindrome(str1):
             end_index = i + int(max_len / 2)
     return str1[start_index:end_index + 1]
 
-
+#
 print(find_longest_palindrome("a"))
