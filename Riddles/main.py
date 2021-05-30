@@ -1,7 +1,11 @@
 import math
-
-
+import itertools
 # without temporary variable
+import random
+import sys
+from collections import Counter
+
+
 def switch_a_b_value(a, b):
     a, b = b, a
     return a, b
@@ -172,5 +176,121 @@ def find_longest_palindrome(str1):
             end_index = i + int(max_len / 2)
     return str1[start_index:end_index + 1]
 
-#
-print(find_longest_palindrome("a"))
+
+def get_second_largest_value(arr):
+    # There is no second largest value
+    if len(arr) < 2:
+        return None
+    minimal_int_val = -sys.maxsize - 1
+    first, second = minimal_int_val, minimal_int_val
+
+    for i in range(len(arr)):
+        if arr[i] > first:
+            # Now first is the maximum, and second is next to maximum
+            second = first
+            first = arr[i]
+
+        # If arr[i] is in between first and second then only second should be updated
+        elif first > arr[i] > second:
+            second = arr[i]
+
+    # There is no second largest value
+    if second == minimal_int_val:
+        return None
+    else:
+        return second
+
+
+def char_counter(s):
+    count = 0
+    for i in range(len(s)):
+        if str(s[i]).isalpha():
+            count += 1
+    return count
+
+
+def digit_counter(s):
+    count = 0
+    for i in range(len(s)):
+        if str(s[i]).isdigit():
+            count += 1
+    return count
+
+
+# it has to contain only alphanumerical characters (a−z, A−Z, 0−9);
+# there should be an even number of letters;
+# there should be an odd number of digits.
+def is_valid_password(password):
+    return str(password).isalnum() and digit_counter(password) % 2 == 1 \
+           and char_counter(password) % 2 == 0
+
+
+# that, given a non-empty string S consisting of N characters, returns the length of the longest word from the string
+# that is a valid password.
+def get_longest_password(s):
+    possible_pass = str(s).split()
+    longest_password = ''
+    for password in possible_pass:
+        if is_valid_password(password) and len(password) > len(longest_password):
+            longest_password = password
+    if longest_password != '':
+        return longest_password
+    return None
+
+
+def unique_permutation(nums):
+    results = []
+
+    def backtrack(comb, counter):
+        if len(comb) == len(nums):
+            # make a deep copy of the resulting permutation,
+            # since the permutation would be backtracked later.
+            results.append(list(comb))
+            return
+
+        for num in counter:
+            if counter[num] > 0:
+                # add this number into the current combination
+                comb.append(num)
+                counter[num] -= 1
+                # continue the exploration
+                backtrack(comb, counter)
+                # revert the choice for the next exploration
+                comb.pop()
+                counter[num] += 1
+
+    backtrack([], Counter(nums))
+
+    return results
+
+
+def all_permutation(nums):
+    return list(itertools.permutations(nums))
+
+
+import itertools
+class Solution(object):
+    def permuteUnique(self, nums):
+        results = []
+
+        def backtrack(comb, counter):
+            if len(comb) == len(nums):
+                # make a deep copy of the resulting permutation,
+                # since the permutation would be backtracked later.
+                results.append(list(comb))
+                return
+
+            for num in counter:
+                if counter[num] > 0:
+                    # add this number into the current combination
+                    comb.append(num)
+                    counter[num] -= 1
+                    # continue the exploration
+                    backtrack(comb, counter)
+                    # revert the choice for the next exploration
+                    comb.pop()
+                    counter[num] += 1
+
+        backtrack([], Counter(nums))
+
+        return results
